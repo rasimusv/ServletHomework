@@ -14,10 +14,10 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
     //language=SQL
     private static final String SQL_FIND_ALL_BY_AGE = "select * from student where age = ?";
 
-    private final DataSource dataSource;
+    private final SimpleJdbcTemplate template;
 
     public UsersRepositoryJdbcImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.template = new SimpleJdbcTemplate(dataSource);
     }
 
     private final RowMapper<User> userRowMapper = row -> User.builder()
@@ -49,11 +49,11 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
 
     @Override
     public List<User> findAll() {
-        return SimpleJdbcTemplate.query(dataSource, SQL_FIND_ALL, userRowMapper);
+        return template.query(SQL_FIND_ALL, userRowMapper);
     }
 
     @Override
     public List<User> findAllByAge(int age) {
-        return SimpleJdbcTemplate.query(dataSource, SQL_FIND_ALL_BY_AGE, userRowMapper, age);
+        return template.query(SQL_FIND_ALL_BY_AGE, userRowMapper, age);
     }
 }

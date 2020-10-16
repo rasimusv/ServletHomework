@@ -1,12 +1,16 @@
 package ru.itis.rasimusv.repositories;
 
+import lombok.*;
 import javax.sql.*;
 import java.sql.*;
 import java.util.*;
 
+@AllArgsConstructor
 public class SimpleJdbcTemplate {
 
-    public static <T> List<T> query(DataSource dataSource, String sql, RowMapper<T> rowMapper, Object... args) {
+    private DataSource dataSource;
+
+    public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... args) {
 
         Connection connection = null;
         PreparedStatement statement = null;

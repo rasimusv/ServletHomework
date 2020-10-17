@@ -8,7 +8,41 @@ import java.util.*;
 @AllArgsConstructor
 public class SimpleJdbcTemplate {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public void execute(String sql, Object ... args) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(sql);
+
+            for (int i = 0; i < args.length; i++) {
+                statement.setObject(i + 1, args[i]);
+            }
+            System.out.println(statement.toString());
+            statement.execute();
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    // ignore
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException throwables) {
+                    // ignore
+                }
+            }
+        }
+    }
 
     public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... args) {
 

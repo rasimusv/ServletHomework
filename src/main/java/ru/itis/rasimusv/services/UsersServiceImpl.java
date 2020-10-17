@@ -7,10 +7,24 @@ import java.util.*;
 
 public class UsersServiceImpl implements UsersService {
 
-    private final UsersRepository usersRepository;
+    UsersRepository usersRepository;
 
     public UsersServiceImpl(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
+    }
+
+    @Override
+    public String getUUIDByCredentials(String username, String password) {
+        List<User> users = usersRepository.findByCredentials(username, password);
+        if (users.isEmpty()) {
+            return null;
+        }
+        return users.get(0).getUuid();
+    }
+
+    @Override
+    public void addUser(User user) {
+        usersRepository.save(user);
     }
 
     @Override
@@ -19,9 +33,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<User> getAllUsersByAge(int age) {
-        return usersRepository.findAllByAge(age);
+    public List<User> getAllUsersByUUID(String uuid) {
+        return usersRepository.findByUUID(uuid);
     }
 
-
+    @Override
+    public boolean containsUserWithUUID(String uuid) {
+        return !getAllUsersByUUID(uuid).isEmpty();
+    }
 }

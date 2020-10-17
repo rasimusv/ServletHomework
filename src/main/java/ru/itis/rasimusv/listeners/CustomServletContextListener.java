@@ -31,9 +31,12 @@ public class CustomServletContextListener implements ServletContextListener {
 
         servletContext.setAttribute("dataSource", dataSource);
 
+        StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource);
+        StudentsService studentsService = new StudentsServiceImpl(studentsRepository);
+        servletContext.setAttribute("studentsService", studentsService);
+
         UsersRepository usersRepository = new UsersRepositoryJdbcImpl(dataSource);
         UsersService usersService = new UsersServiceImpl(usersRepository);
-
         servletContext.setAttribute("usersService", usersService);
     }
 

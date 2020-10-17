@@ -9,10 +9,10 @@ import java.util.*;
 public class UsersRepositoryJdbcImpl implements UsersRepository {
 
     //language=SQL
-    private static final String SQL_FIND_ALL = "select * from student";
+    private static final String SQL_FIND_ALL = "SELECT * FROM student";
 
     //language=SQL
-    private static final String SQL_FIND_ALL_BY_AGE = "select * from student where age = ?";
+    private static final String SQL_FIND_ALL_BY_AGE = "SELECT * FROM student WHERE age = ?";
 
     private final SimpleJdbcTemplate template;
 

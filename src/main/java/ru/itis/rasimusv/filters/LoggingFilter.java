@@ -1,10 +1,15 @@
 package ru.itis.rasimusv.filters;
 
+import org.slf4j.*;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
 
-public class RequestUrlFilter implements Filter {
+public class LoggingFilter implements Filter {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -13,9 +18,10 @@ public class RequestUrlFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        System.out.println(request.getRequestURL());
+        logger.info(request.getHeader("User-Agent"));
+        logger.info(request.getRequestURL().toString());
 
         filterChain.doFilter(servletRequest, servletResponse);
     }

@@ -11,15 +11,13 @@ import java.util.*;
 
 public class CustomServletContextListener implements ServletContextListener {
 
-
-
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ServletContext servletContext = servletContextEvent.getServletContext();
 
         Properties properties = new Properties();
         try {
-            properties.load(new FileReader("db.properties"));
+            properties.load(getClass().getResourceAsStream("../../../../db.properties"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

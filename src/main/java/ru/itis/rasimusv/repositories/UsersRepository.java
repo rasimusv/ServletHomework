@@ -9,4 +9,6 @@ public interface UsersRepository extends CrudRepository<User> {
 
     List<User> findAllByAge(int age);
 
+    List<User> findAll();
+
 }

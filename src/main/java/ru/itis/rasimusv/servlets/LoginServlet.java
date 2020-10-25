@@ -1,26 +1,32 @@
 package ru.itis.rasimusv.servlets;
 
-import ru.itis.rasimusv.services.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.itis.rasimusv.services.UsersService;
 
-import javax.servlet.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.*;
+import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private UsersService usersService;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         ServletContext servletContext = config.getServletContext();
         this.usersService = (UsersService) servletContext.getAttribute("usersService");
+        this.passwordEncoder = (PasswordEncoder) servletContext.getAttribute("passwordEncoder");
     }
 
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().setAttribute("Authenticated", "false");
         try {
             request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -31,30 +37,27 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
-        String hashPassword = PasswordService.encrypt(request.getParameter("password"));
+        String password = request.getParameter("password");
 
-        String UUID = usersService.getUUIDByCredentials(username, hashPassword);
+        String hashPassword = usersService.getHashPasswordByUsername(username);
 
-        if (UUID != null) {
-            Cookie cookie = new Cookie("Auth", UUID);
-            cookie.setMaxAge(60 * 60 * 24 * 7);
-            response.addCookie(cookie);
+        boolean correctPassword = false;
+
+        if (hashPassword != null) {
+            correctPassword = passwordEncoder.matches(password, hashPassword);
+        }
+
+        if (correctPassword) {
+            request.getSession().setAttribute("Authenticated", "true");
+
             try {
                 response.sendRedirect("/");
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         } else {
-            response.setContentType("text/html");
-            PrintWriter out;
             try {
-                out = response.getWriter();
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-            out.println("Invalid");
-            try {
-                request.getRequestDispatcher("/jsp/students.jsp").forward(request,response);
+                request.getRequestDispatcher("/jsp/login.jsp").forward(request,response);
             } catch (ServletException | IOException e) {
                 throw new IllegalStateException(e);
             }

@@ -1,9 +1,9 @@
 package ru.itis.rasimusv.services;
 
-import ru.itis.rasimusv.models.*;
-import ru.itis.rasimusv.repositories.*;
+import ru.itis.rasimusv.models.User;
+import ru.itis.rasimusv.repositories.UsersRepository;
 
-import java.util.*;
+import java.util.List;
 
 public class UsersServiceImpl implements UsersService {
 
@@ -39,6 +39,20 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public boolean containsUserWithUUID(String uuid) {
-        return !getAllUsersByUUID(uuid).isEmpty();
+        return !usersRepository.findByUUID(uuid).isEmpty();
+    }
+
+    @Override
+    public String getHashPasswordByUsername(String username) {
+        List<User> users = usersRepository.findByUsername(username);
+        if (users.isEmpty()) {
+            return null;
+        }
+        return users.get(0).getHashPassword();
+    }
+
+    @Override
+    public boolean containsUserWithUsername(String username) {
+        return !usersRepository.findByUsername(username).isEmpty();
     }
 }

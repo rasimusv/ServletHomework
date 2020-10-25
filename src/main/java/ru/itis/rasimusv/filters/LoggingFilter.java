@@ -3,8 +3,10 @@ package ru.itis.rasimusv.filters;
 import org.slf4j.*;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 
 public class LoggingFilter implements Filter {
 

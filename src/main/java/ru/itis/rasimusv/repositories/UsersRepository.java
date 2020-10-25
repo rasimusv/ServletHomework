@@ -1,8 +1,8 @@
 package ru.itis.rasimusv.repositories;
 
-import ru.itis.rasimusv.models.*;
+import ru.itis.rasimusv.models.User;
 
-import java.util.*;
+import java.util.List;
 
 public interface UsersRepository extends CrudRepository<User> {
 
@@ -11,5 +11,7 @@ public interface UsersRepository extends CrudRepository<User> {
     List<User> findByUUID(String uuid);
 
     List<User> findByCredentials(String username, String password);
+
+    List<User> findByUsername(String username);
 
 }

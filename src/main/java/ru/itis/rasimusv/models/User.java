@@ -2,7 +2,7 @@ package ru.itis.rasimusv.models;
 
 import lombok.*;
 
-import java.util.*;
+import java.util.UUID;
 
 @Getter
 @Setter

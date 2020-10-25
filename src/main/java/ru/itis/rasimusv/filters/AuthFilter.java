@@ -2,11 +2,16 @@
 
 package ru.itis.rasimusv.filters;
 
-import ru.itis.rasimusv.services.*;
+
+import ru.itis.rasimusv.services.UsersService;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 
 public class AuthFilter implements Filter {
 
@@ -23,21 +28,15 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String [] url = request.getRequestURL().toString().split("/");
-        String page = url[url.length - 1];
+        String page = request.getRequestURI().replaceAll("/", "");
+
+        System.out.println(page);
 
         if (!page.equals("registration") && !page.equals("login")) {
-            Cookie [] cookies = request.getCookies();
-            Cookie cookie = null;
 
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies[i].getName().equals("Auth")) {
-                    cookie = cookies[i];
-                    break;
-                }
-            }
+            HttpSession session = request.getSession(false);
 
-            if (cookie == null || !usersService.containsUserWithUUID(cookie.getValue())) {
+            if (session == null || !session.getAttribute("Authenticated").equals("true")) {
                 response.sendRedirect("/login");
                 return;
             }

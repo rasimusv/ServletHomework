@@ -1,9 +1,10 @@
 package ru.itis.rasimusv.repositories;
 
-import ru.itis.rasimusv.models.*;
+import ru.itis.rasimusv.models.User;
 
-import javax.sql.*;
-import java.util.*;
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Optional;
 
 public class UsersRepositoryJdbcImpl implements UsersRepository {
 
@@ -15,6 +16,9 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
 
     //language=SQL
     private static final String SQL_FIND_ALL_BY_USERNAME_AND_PASSWORD = "SELECT * FROM users WHERE username = ? AND hashpassword = ?";
+
+    //language=SQL
+    private static final String SQL_FIND_ALL_BY_USERNAME = "SELECT * FROM users WHERE username = ?";
 
     //language=SQL
     private static final String SQL_ADD_USER = "INSERT INTO users (uuid, username, hashpassword) VALUES (?, ?, ?)";
@@ -65,4 +69,8 @@ public class UsersRepositoryJdbcImpl implements UsersRepository {
     public List<User> findByCredentials(String username, String password) {
         return template.query(SQL_FIND_ALL_BY_USERNAME_AND_PASSWORD,userRowMapper, username, password);
     }
+
+    @Override
+    public List<User> findByUsername(String username) {
+        return template.query(SQL_FIND_ALL_BY_USERNAME,userRowMapper, username);    }
 }

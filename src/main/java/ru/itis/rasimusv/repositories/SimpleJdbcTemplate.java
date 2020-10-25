@@ -1,9 +1,15 @@
 package ru.itis.rasimusv.repositories;
 
 import lombok.*;
-import javax.sql.*;
-import java.sql.*;
-import java.util.*;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @AllArgsConstructor
 public class SimpleJdbcTemplate {

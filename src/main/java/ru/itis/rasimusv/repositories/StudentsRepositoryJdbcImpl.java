@@ -1,10 +1,10 @@
 package ru.itis.rasimusv.repositories;
 
-import ru.itis.rasimusv.models.*;
+import ru.itis.rasimusv.models.Student;
 
-import javax.sql.*;
-import java.util.*;
-
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Optional;
 
 public class StudentsRepositoryJdbcImpl implements StudentsRepository {
 

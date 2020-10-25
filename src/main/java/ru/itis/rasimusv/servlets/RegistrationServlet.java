@@ -1,27 +1,33 @@
 package ru.itis.rasimusv.servlets;
 
-import ru.itis.rasimusv.models.*;
-import ru.itis.rasimusv.services.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.itis.rasimusv.models.User;
+import ru.itis.rasimusv.services.UsersService;
 
-import javax.servlet.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.*;
+import java.io.IOException;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
 
     private UsersService usersService;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         ServletContext servletContext = config.getServletContext();
         this.usersService = (UsersService) servletContext.getAttribute("usersService");
+        this.passwordEncoder = (PasswordEncoder) servletContext.getAttribute("passwordEncoder");
     }
 
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().setAttribute("Authenticated", "false");
         try {
             request.getRequestDispatcher("/jsp/registration.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -32,20 +38,27 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
-        String hashPassword = PasswordService.encrypt(request.getParameter("password"));
+        String password = request.getParameter("password");
+        String hashPassword = passwordEncoder.encode(password);
 
-        User currentUser = new User(username, hashPassword);
+        if (usersService.containsUserWithUsername(username)) {
+            try {
+                request.getRequestDispatcher("/jsp/registration.jsp").forward(request,response);
+            } catch (ServletException | IOException e) {
+                throw new IllegalStateException(e);
+            }
+        } else {
+            User currentUser = new User(username, hashPassword);
 
-        usersService.addUser(currentUser);
+            usersService.addUser(currentUser);
 
-        Cookie cookie = new Cookie("Auth", currentUser.getUuid());
-        cookie.setMaxAge(60 * 60 * 24 * 7);
-        response.addCookie(cookie);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
+            request.getSession().setAttribute("Authenticated", "true");
+
+            try {
+                response.sendRedirect("/");
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
         }
     }
-
 }

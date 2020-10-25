@@ -1,8 +1,9 @@
 package ru.itis.rasimusv.filters;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RequestUrlFilter implements Filter {
     @Override

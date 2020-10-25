@@ -1,14 +1,27 @@
 package ru.itis.rasimusv.listeners;
 
-import com.zaxxer.hikari.*;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-import ru.itis.rasimusv.repositories.*;
-import ru.itis.rasimusv.services.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.itis.rasimusv.repositories.StudentsRepository;
+import ru.itis.rasimusv.repositories.StudentsRepositoryJdbcImpl;
+import ru.itis.rasimusv.repositories.UsersRepository;
+import ru.itis.rasimusv.repositories.UsersRepositoryJdbcImpl;
+import ru.itis.rasimusv.services.StudentsService;
+import ru.itis.rasimusv.services.StudentsServiceImpl;
+import ru.itis.rasimusv.services.UsersService;
+import ru.itis.rasimusv.services.UsersServiceImpl;
 
-import javax.servlet.*;
-import java.io.*;
-import java.util.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import java.io.IOException;
+import java.util.Properties;
 
+@WebListener
 public class CustomServletContextListener implements ServletContextListener {
 
     @Override
@@ -17,7 +30,7 @@ public class CustomServletContextListener implements ServletContextListener {
 
         Properties properties = new Properties();
         try {
-            properties.load(getClass().getResourceAsStream("../../../../db.properties"));
+            properties.load(servletContext.getResourceAsStream("/WEB-INF/db.properties"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -29,15 +42,18 @@ public class CustomServletContextListener implements ServletContextListener {
         hikariConfig.setMaximumPoolSize(Integer.parseInt(properties.getProperty("db.hikari.max-pool-size")));
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-        servletContext.setAttribute("dataSource", dataSource);
-
         StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource);
         StudentsService studentsService = new StudentsServiceImpl(studentsRepository);
-        servletContext.setAttribute("studentsService", studentsService);
 
         UsersRepository usersRepository = new UsersRepositoryJdbcImpl(dataSource);
         UsersService usersService = new UsersServiceImpl(usersRepository);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        servletContext.setAttribute("dataSource", dataSource);
+        servletContext.setAttribute("studentsService", studentsService);
         servletContext.setAttribute("usersService", usersService);
+        servletContext.setAttribute("passwordEncoder", passwordEncoder);
     }
 
     @Override

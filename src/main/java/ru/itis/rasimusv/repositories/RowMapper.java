@@ -1,6 +1,8 @@
 package ru.itis.rasimusv.repositories;
 
-import java.sql.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface RowMapper<T> {
     T mapRow(ResultSet row) throws SQLException;

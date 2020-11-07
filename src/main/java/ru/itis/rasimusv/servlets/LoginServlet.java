@@ -1,7 +1,9 @@
 package ru.itis.rasimusv.servlets;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.itis.rasimusv.services.UsersService;
+import ru.itis.rasimusv.services.UsersServiceImpl;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -17,12 +19,12 @@ public class LoginServlet extends HttpServlet {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config){
         ServletContext servletContext = config.getServletContext();
-        this.usersService = (UsersService) servletContext.getAttribute("usersService");
-        this.passwordEncoder = (PasswordEncoder) servletContext.getAttribute("passwordEncoder");
+        ApplicationContext context = (ApplicationContext) servletContext.getAttribute("springContext");
+        usersService = context.getBean("usersService", UsersServiceImpl.class);
+        passwordEncoder = context.getBean("passwordEncoder", PasswordEncoder.class);
     }
-
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

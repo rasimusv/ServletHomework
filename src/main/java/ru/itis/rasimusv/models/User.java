@@ -8,7 +8,8 @@ import java.util.UUID;
 @Setter
 @ToString
 @EqualsAndHashCode
-
+@Builder
+@AllArgsConstructor
 public class User {
     private Long id;
     private String uuid;
@@ -19,12 +20,5 @@ public class User {
         this.username = username;
         this.hashPassword = hashPassword;
         this.uuid = UUID.randomUUID().toString();
-    }
-
-    public User(Long id, String uuid, String username, String hashPassword) {
-        this.id = id;
-        this.uuid = uuid;
-        this.username = username;
-        this.hashPassword = hashPassword;
     }
 }

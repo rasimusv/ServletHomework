@@ -6,8 +6,6 @@ import ru.itis.rasimusv.models.User;
 import java.util.List;
 
 public interface UsersService {
-    
-    String getUUIDByCredentials(String username, String password);
 
     void addUser(User user);
 

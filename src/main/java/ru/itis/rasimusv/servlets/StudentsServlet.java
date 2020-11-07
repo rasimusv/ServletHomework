@@ -1,6 +1,8 @@
 package ru.itis.rasimusv.servlets;
 
+import org.springframework.context.ApplicationContext;
 import ru.itis.rasimusv.services.StudentsService;
+import ru.itis.rasimusv.services.StudentsServiceImpl;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -18,11 +20,11 @@ public class StudentsServlet extends HttpServlet {
     private StudentsService studentsService;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         ServletContext servletContext = config.getServletContext();
-        this.studentsService = (StudentsService) servletContext.getAttribute("studentsService");
+        ApplicationContext context = (ApplicationContext) servletContext.getAttribute("springContext");
+        studentsService = context.getBean("studentsService", StudentsServiceImpl.class);
     }
-
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {

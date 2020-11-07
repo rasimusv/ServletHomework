@@ -7,12 +7,11 @@ import java.util.List;
 
 public class StudentsServiceImpl implements StudentsService {
 
-    private final StudentsRepository studentsRepository;
+    private final StudentsRepository<Long> studentsRepository;
 
-    public StudentsServiceImpl(StudentsRepository studentsRepository) {
+    public StudentsServiceImpl(StudentsRepository<Long> studentsRepository) {
         this.studentsRepository = studentsRepository;
     }
-
     @Override
     public List<Student> getAllStudents() {
         return studentsRepository.findAll();

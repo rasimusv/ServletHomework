@@ -1,26 +1,20 @@
 //АУФ!! АУФ!!
-
 package ru.itis.rasimusv.filters;
 
-
+import org.springframework.context.ApplicationContext;
 import ru.itis.rasimusv.services.UsersService;
+import ru.itis.rasimusv.services.UsersServiceImpl;
 
 import javax.servlet.*;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
 public class AuthFilter implements Filter {
 
-    UsersService usersService;
-
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        ServletContext servletContext = filterConfig.getServletContext();
-        this.usersService = (UsersService) servletContext.getAttribute("usersService");
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

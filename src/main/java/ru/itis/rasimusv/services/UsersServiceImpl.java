@@ -7,19 +7,10 @@ import java.util.List;
 
 public class UsersServiceImpl implements UsersService {
 
-    UsersRepository usersRepository;
+    UsersRepository<Long> usersRepository;
 
-    public UsersServiceImpl(UsersRepository usersRepository) {
+    public UsersServiceImpl(UsersRepository<Long> usersRepository) {
         this.usersRepository = usersRepository;
-    }
-
-    @Override
-    public String getUUIDByCredentials(String username, String password) {
-        List<User> users = usersRepository.findByCredentials(username, password);
-        if (users.isEmpty()) {
-            return null;
-        }
-        return users.get(0).getUuid();
     }
 
     @Override

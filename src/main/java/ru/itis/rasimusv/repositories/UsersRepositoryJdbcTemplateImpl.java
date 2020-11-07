@@ -5,14 +5,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import ru.itis.rasimusv.models.User;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class UsersRepositoryJdbcTemplateImpl implements UsersRepository<Long> {
 
     //language=SQL
     private static final String SQL_FIND_ALL = "SELECT * FROM users";
+
+    //language=SQL
+    private static final String SQL_SELECT_ALL_WITH_PAGES = "SELECT * FROM users ORDER BY id LIMIT :limit OFFSET :offset ;";
 
     //language=SQL
     private static final String SQL_FIND_ALL_BY_UUID = "SELECT * FROM users WHERE uuid = :uuid";
@@ -34,7 +35,6 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository<Long> {
     public UsersRepositoryJdbcTemplateImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
     @Override
     public void save(User user) {
@@ -64,6 +64,15 @@ public class UsersRepositoryJdbcTemplateImpl implements UsersRepository<Long> {
     public List<User> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, userRowMapper);
     }
+
+    @Override
+    public List<User> findAll(int page, int size) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("limit", size);
+        params.put("offset", page * size);
+        return jdbcTemplate.query(SQL_SELECT_ALL_WITH_PAGES, params, userRowMapper);
+    }
+
 
     @Override
     public List<User> findByUUID(String uuid) {

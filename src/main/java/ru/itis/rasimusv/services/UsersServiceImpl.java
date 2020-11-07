@@ -24,6 +24,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public List<User> getAllUsers(int page, int size) {
+        return usersRepository.findAll(page, size);
+    }
+
+
+    @Override
     public List<User> getAllUsersByUUID(String uuid) {
         return usersRepository.findByUUID(uuid);
     }

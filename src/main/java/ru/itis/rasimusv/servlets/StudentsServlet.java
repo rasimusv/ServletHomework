@@ -23,7 +23,7 @@ public class StudentsServlet extends HttpServlet {
     public void init(ServletConfig config) {
         ServletContext servletContext = config.getServletContext();
         ApplicationContext context = (ApplicationContext) servletContext.getAttribute("springContext");
-        studentsService = context.getBean("studentsService", StudentsServiceImpl.class);
+        studentsService = context.getBean(StudentsServiceImpl.class);
     }
 
     @Override

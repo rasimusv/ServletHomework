@@ -24,8 +24,8 @@ public class RegistrationServlet extends HttpServlet {
     public void init(ServletConfig config){
         ServletContext servletContext = config.getServletContext();
         ApplicationContext context = (ApplicationContext) servletContext.getAttribute("springContext");
-        usersService = context.getBean("usersService", UsersServiceImpl.class);
-        passwordEncoder = context.getBean("passwordEncoder", PasswordEncoder.class);
+        usersService = context.getBean(UsersServiceImpl.class);
+        passwordEncoder = context.getBean(PasswordEncoder.class);
     }
 
     @Override

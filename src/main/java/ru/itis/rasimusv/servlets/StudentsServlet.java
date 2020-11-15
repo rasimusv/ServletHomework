@@ -28,9 +28,19 @@ public class StudentsServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute("studentsForJsp", studentsService.getAllStudents());
+        Cookie [] cookies = request.getCookies();
+        Cookie cookie = null;
+        for (Cookie c : cookies) {
+            if (c.getName().equals("color")) {
+                cookie = c;
+            }
+        }
+
+        request.setAttribute("studentsList", studentsService.getAllStudents());
+        request.setAttribute("colorCookie", cookie);
         try {
-            request.getRequestDispatcher("/jsp/students.jsp").forward(request, response);
+            //request.getRequestDispatcher("/jsp/students.jsp").forward(request, response);
+            request.getRequestDispatcher("/ftlh/students.ftlh").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new IllegalStateException(e);
         }

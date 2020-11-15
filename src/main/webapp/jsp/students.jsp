@@ -22,7 +22,7 @@
     <th>LAST NAME</th>
     <th>AGE</th>
     <%
-        List<Student> students = (List<Student>) request.getAttribute("studentsForJsp");
+        List<Student> students = (List<Student>) request.getAttribute("studentsList");
         for (int i = 0; i < students.size(); i++) {
     %>
     <tr>

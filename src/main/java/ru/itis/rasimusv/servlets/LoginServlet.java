@@ -30,7 +30,8 @@ public class LoginServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().setAttribute("Authenticated", "false");
         try {
-            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+            //request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/ftlh/login.ftlh").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new IllegalStateException(e);
         }
@@ -59,7 +60,8 @@ public class LoginServlet extends HttpServlet {
             }
         } else {
             try {
-                request.getRequestDispatcher("/jsp/login.jsp").forward(request,response);
+                //request.getRequestDispatcher("/jsp/login.jsp").forward(request,response);
+                request.getRequestDispatcher("/ftlh/login.ftlh").forward(request, response);
             } catch (ServletException | IOException e) {
                 throw new IllegalStateException(e);
             }

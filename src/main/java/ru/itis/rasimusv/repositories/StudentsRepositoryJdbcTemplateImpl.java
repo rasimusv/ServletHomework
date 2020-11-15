@@ -4,10 +4,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import ru.itis.rasimusv.models.Student;
+import ru.itis.rasimusv.models.User;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class StudentsRepositoryJdbcTemplateImpl implements StudentsRepository<Long> {
 
@@ -19,6 +18,9 @@ public class StudentsRepositoryJdbcTemplateImpl implements StudentsRepository<Lo
 
     //language=SQL
     private static final String SQL_ADD_STUDENT = "INSERT INTO student (id, first_name, last_name, age, group_number) VALUES (:id, :first_name, :last_name, :age, :group_number)";
+
+    //language=SQL
+    private static final String SQL_SELECT_ALL_WITH_PAGES = "SELECT * FROM student ORDER BY id LIMIT :limit OFFSET :offset ;";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -62,6 +64,14 @@ public class StudentsRepositoryJdbcTemplateImpl implements StudentsRepository<Lo
     @Override
     public List<Student> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, studentRowMapper);
+    }
+
+    @Override
+    public List<Student> findAll(int page, int size) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("limit", size);
+        params.put("offset", page * size);
+        return jdbcTemplate.query(SQL_SELECT_ALL_WITH_PAGES, params, studentRowMapper);
     }
 
     @Override

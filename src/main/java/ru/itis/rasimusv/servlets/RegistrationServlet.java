@@ -1,7 +1,6 @@
 package ru.itis.rasimusv.servlets;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.itis.rasimusv.models.User;
 import ru.itis.rasimusv.services.UsersService;
@@ -32,7 +31,8 @@ public class RegistrationServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().setAttribute("Authenticated", "false");
         try {
-            request.getRequestDispatcher("/jsp/registration.jsp").forward(request, response);
+            //request.getRequestDispatcher("/jsp/registration.jsp").forward(request, response);
+            request.getRequestDispatcher("/ftlh/registration.ftlh").forward(request, response);
         } catch (ServletException | IOException e) {
             throw new IllegalStateException(e);
         }
@@ -46,7 +46,8 @@ public class RegistrationServlet extends HttpServlet {
 
         if (usersService.containsUserWithUsername(username)) {
             try {
-                request.getRequestDispatcher("/jsp/registration.jsp").forward(request,response);
+                //request.getRequestDispatcher("/jsp/registration.jsp").forward(request,response);
+                request.getRequestDispatcher("/ftlh/registration.ftlh").forward(request, response);
             } catch (ServletException | IOException e) {
                 throw new IllegalStateException(e);
             }

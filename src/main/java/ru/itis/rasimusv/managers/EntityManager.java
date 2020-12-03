@@ -175,7 +175,7 @@ public class EntityManager {
                 request.append(", ");
             }
         }
-        request.append(" FROM ").append(tableName).append(" WHERE id = ").append(idValue.toString());
+        request.append(" FROM ").append(tableName).append(" WHERE id = ").append(idValue.toString()).append(";");
 
         ResultSet resultSet;
         try {

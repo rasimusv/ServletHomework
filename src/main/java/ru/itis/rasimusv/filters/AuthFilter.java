@@ -1,10 +1,6 @@
 //АУФ!! АУФ!!
 package ru.itis.rasimusv.filters;
 
-import org.springframework.context.ApplicationContext;
-import ru.itis.rasimusv.services.UsersService;
-import ru.itis.rasimusv.services.UsersServiceImpl;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +18,27 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String page = request.getRequestURI().replaceAll("/", "");
+        //05
+        /*
+        if (!page.equals("registration") && !page.equals("login")) {
+            Cookie [] cookies = request.getCookies();
+            Cookie cookie = null;
 
-        System.out.println(page);
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("Auth")) {
+                    cookie = cookies[i];
+                    break;
+                }
+            }
+
+            if (cookie == null || !usersService.containsUserWithUUID(cookie.getValue())) {
+                response.sendRedirect("/login");
+                return;
+            }
+        }
+         */
+
+        String page = request.getRequestURI().replaceAll("/", "");
 
         if (!page.equals("registration") && !page.equals("login")) {
 

@@ -10,6 +10,7 @@
         <label>Никнейм<input name="username" type="text" required></label>
         <label>Пароль<input name="password" type="password" required></label>
     </fieldset>
+    <input type="hidden" value="${_csrf_token}" name="_csrf_token">
     <input type="submit" value="Войти">
 </form>
 </body>
